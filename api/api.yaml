@@ -1,0 +1,157 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Scoreplay
+paths:
+  /ping:
+    get:
+      responses:
+        '200':
+          description: ping
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pong'
+  /tags:
+    post:
+      operationId: CreateTag
+      requestBody:
+        description: create a tag
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTagCommand'
+      responses:
+        '201':
+          description: tag created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateTagResult'
+    get:
+      responses:
+        '200':
+          description: tag list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagListResult'
+  /media:
+    post:
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name: 
+                  type: string
+                tags: 
+                  type: array
+                  items:
+                    type: string
+                file:
+                  type: string
+                  format: binary
+              required:
+                - name
+                - tags
+                - file
+              # $ref: '#/components/schemas/CreateMediaCommand'
+      responses:
+        '201':
+          description: media created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateMediaResult'
+        # '500':
+        #   description: error
+        #   content:
+        #     application/json:
+        #       schema:
+        #         $ref: '#/components/schemas/Error'
+    get:
+      operationId: FindMedia
+      parameters:
+        - in: query
+          name: tag
+          schema:
+            type: string
+          required: true
+          description: tag filter
+      responses:
+        '200':
+          description: media list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MediaListResult'
+components:
+  schemas:
+    Pong:
+      type: object
+      required:
+        - ping
+      properties:
+        ping:
+          type: string
+          example: pong
+    CreateTagCommand:
+      type: object
+      required:
+        - name  
+      properties:
+        name:
+          type: string
+    CreateTagResult:
+      type: object
+    CreateMediaResult:
+      type: object
+    TagListResult:
+      type: array
+      items:
+        oneOf:
+          - $ref: '#/components/schemas/Tag'
+    Tag:
+      type: object
+      required:
+        - id  
+        - name  
+      properties:
+        id:
+          type: string  
+        name:
+          type: string  
+    MediaListResult:
+      type: array
+      items:
+        oneOf:
+          - $ref: '#/components/schemas/Media'
+    Media:
+      type: object
+      required:
+        - id  
+        - name  
+        - tags  
+        - fileUrl
+      properties:
+        id:
+          type: string  
+        name:
+          type: string  
+        tags:
+          type: array
+          items:
+            type: string
+        fileUrl:
+          type: string  
+    # Error:
+    #   type: object
+    #   required:
+    #     - message
+    #   properties:
+    #     message:
+    #       type: string

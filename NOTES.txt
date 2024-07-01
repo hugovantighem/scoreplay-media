@@ -1,0 +1,13 @@
+Design Choices:
+- requirement is a CRUDy style with no invariant => implementation uses a transaction script
+- tags are not subject to update => Media aggregate embeds Tags
+- api generate using openapi specs for conventions and maintainability
+- openapi specs as api doducmentation 
+
+Improvements:
+- typed errors
+- technical error retry
+- model with private fields
+- logs
+- listing pagination
+- clean file upload directory

@@ -1,0 +1,1 @@
+curl -i http://localhost:8080/assets/4c50a93b-5bb7-4cad-bf09-27942b1ff371
